@@ -1,6 +1,7 @@
 package com.infy.student_crud_app_1.service;
 
 import com.infy.student_crud_app_1.dto.StudentDTO;
+import com.infy.student_crud_app_1.exception.StudentException;
 import com.infy.student_crud_app_1.model.Student;
 import com.infy.student_crud_app_1.repo.StudentRepo;
 import jakarta.transaction.Transactional;
@@ -22,7 +23,7 @@ public class StudentServiceImpl implements StudentService{
     public String addStudent(StudentDTO studentDTO) throws StudentException {
         Student s=studentRepo.findByName(studentDTO.getName());
         if(s!=null){
-            throw new StudentException("Student already exists");
+            throw new StudentException("Student_already_exists");
         }else{
             Student student= studentRepo.save( convertToEntity(studentDTO));
             return "Student added with ID : "+student.getStudentId();
@@ -33,7 +34,7 @@ public class StudentServiceImpl implements StudentService{
     public StudentDTO getStudentByName(String name) throws StudentException {
         Student s=studentRepo.findByName(name);
         if(s==null){
-            throw new StudentException("Student not exists");
+            throw new StudentException("Student_not_exists");
         }
         else{
            StudentDTO studentDTO= convertToDTO(s);
@@ -46,7 +47,7 @@ public class StudentServiceImpl implements StudentService{
     public StudentDTO getStudentById(Integer id) throws StudentException {
         Optional<Student> s=studentRepo.findById(id);
         if(s.isEmpty()){
-            throw new StudentException("Student not exists");
+            throw new StudentException("Student_not_exists");
         }
         else{
             StudentDTO studentDTO= convertToDTO(s.get());
@@ -69,7 +70,7 @@ public class StudentServiceImpl implements StudentService{
     public String deleteStudent(Integer id) throws StudentException {
         Optional<Student> s=studentRepo.findById(id);
         if(s.isEmpty()){
-            throw new StudentException("Student not exists");
+            throw new StudentException("Student_not_exists");
         }
         else{
             studentRepo.deleteById(id);
@@ -90,7 +91,7 @@ public class StudentServiceImpl implements StudentService{
         return s;
     }
 
-    private StudentDTO convertToDTO(Student student){
+    public StudentDTO convertToDTO(Student student){
         StudentDTO studentDTO=new StudentDTO();
         studentDTO.setStudentId(student.getStudentId());
         studentDTO.setBranch(student.getBranch());
@@ -98,7 +99,7 @@ public class StudentServiceImpl implements StudentService{
         studentDTO.setClgName(student.getClgName());
         return studentDTO;
     }
-    private Student convertToEntity(StudentDTO studentDTO){
+    public Student convertToEntity(StudentDTO studentDTO){
         Student student=new Student();
        // student.setStudentId(studentDTO.getStudentId());
         student.setBranch(studentDTO.getBranch());

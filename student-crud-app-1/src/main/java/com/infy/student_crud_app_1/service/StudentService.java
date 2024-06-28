@@ -1,7 +1,7 @@
 package com.infy.student_crud_app_1.service;
 
 import com.infy.student_crud_app_1.dto.StudentDTO;
-import jakarta.persistence.criteria.CriteriaBuilder;
+import com.infy.student_crud_app_1.exception.StudentException;
 
 import java.util.List;
 

@@ -1,8 +1,7 @@
 package com.infy.student_crud_app_1.api;
 
 import com.infy.student_crud_app_1.dto.StudentDTO;
-import com.infy.student_crud_app_1.model.Student;
-import com.infy.student_crud_app_1.service.StudentException;
+import com.infy.student_crud_app_1.exception.StudentException;
 import com.infy.student_crud_app_1.service.StudentService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
