@@ -56,8 +56,11 @@ public class StudentServiceImpl implements StudentService{
     }
 
     @Override
-    public List<StudentDTO> getAll() {
+    public List<StudentDTO> getAll() throws StudentException {
        List<Student> list= studentRepo.findAll();
+       if(list.isEmpty()){
+           throw new StudentException("No_Students_Found");
+       }
        List<StudentDTO> studentDTOS=new ArrayList<>();
        for(Student s:list){
            StudentDTO studentDTO=convertToDTO(s);

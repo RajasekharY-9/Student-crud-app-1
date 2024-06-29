@@ -5,13 +5,10 @@ import com.infy.student_crud_app_1.exception.StudentException;
 import com.infy.student_crud_app_1.model.Student;
 import com.infy.student_crud_app_1.repo.StudentRepo;
 import com.infy.student_crud_app_1.service.StudentServiceImpl;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoSettings;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Arrays;
@@ -31,6 +28,7 @@ class StudentCrudApp1ApplicationTests {
 	private StudentServiceImpl studentService;
 	private  StudentDTO studentDTO1;
 	private Student student;
+
 	@BeforeEach
 	void contextLoads() {
 		studentDTO1=new StudentDTO(101,"Raja","PBS","MPC");
@@ -47,6 +45,7 @@ class StudentCrudApp1ApplicationTests {
 
 		// Call the service method and assert the success message
 		String response = studentService.addStudent(studentDTO1);
+
 		assertEquals("Student added with ID : 101", response);
 	}
 	@Test
@@ -100,7 +99,7 @@ class StudentCrudApp1ApplicationTests {
 	}
 
 	@Test
-	void testGetAllStudents() {
+	void testGetAllStudents() throws StudentException {
 		List<Student> students = Arrays.asList(student);
 		when(studentRepo.findAll()).thenReturn(students);
 
@@ -108,15 +107,17 @@ class StudentCrudApp1ApplicationTests {
 		assertNotNull(result);
 		assertEquals(1, result.size());
 		assertEquals(studentDTO1.getName(), result.get(0).getName());
+		//assertEquals(studentDTO1.getName(), result.get(0).getName());
 	}
 
 	@Test
-	void testGetAllStudentsEmpty() {
+	void testGetAllStudentsEmpty() throws StudentException {
 		when(studentRepo.findAll()).thenReturn(Arrays.asList());
+StudentException exception=assertThrows(StudentException.class,()->{
+	studentService.getAll();
+});
 
-		List<StudentDTO> result = studentService.getAll();
-		assertNotNull(result);
-		assertTrue(result.isEmpty());
+		assertEquals("No_Students_Found",exception.getMessage());
 	}
 
 	@Test

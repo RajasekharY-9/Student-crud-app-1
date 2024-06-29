@@ -35,7 +35,7 @@ public class StudentAPI {
     return new ResponseEntity<>(student,HttpStatus.OK);
 }
 @GetMapping("/all")
-    public ResponseEntity<List<StudentDTO>> getAll(){
+    public ResponseEntity<List<StudentDTO>> getAll() throws StudentException {
    List<StudentDTO> s= studentService.getAll();
     return new ResponseEntity<>(s,HttpStatus.OK);
     }
