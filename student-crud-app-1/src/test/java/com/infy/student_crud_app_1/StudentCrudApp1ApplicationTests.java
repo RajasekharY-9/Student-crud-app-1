@@ -14,9 +14,13 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -56,5 +60,93 @@ class StudentCrudApp1ApplicationTests {
 		});
 
 		assertEquals("Student_already_exists", exception.getMessage());
+	}
+	@Test
+	void testGetStudentByNameSuccess() throws StudentException {
+		when(studentRepo.findByName(student.getName())).thenReturn(student);
+		StudentDTO result = studentService.getStudentByName(student.getName());
+		assertNotNull(result);
+		assertEquals(studentDTO1.getName(), result.getName());
+	}
+	@Test
+	void testGetStudentByNameFailure() {
+		when(studentRepo.findByName(student.getName())).thenReturn(null);
+
+		StudentException exception = assertThrows(StudentException.class, () -> {
+			studentService.getStudentByName(student.getName());
+		});
+
+		assertEquals("Student_not_exists", exception.getMessage());
+	}
+
+	@Test
+	void testGetStudentByIdSuccess() throws StudentException {
+		when(studentRepo.findById(student.getStudentId())).thenReturn(Optional.of(student));
+
+		StudentDTO result = studentService.getStudentById(student.getStudentId());
+		assertNotNull(result);
+		assertEquals(studentDTO1.getName(), result.getName());
+	}
+
+	@Test
+	void testGetStudentByIdFailure() {
+		when(studentRepo.findById(student.getStudentId())).thenReturn(Optional.empty());
+
+		StudentException exception = assertThrows(StudentException.class, () -> {
+			studentService.getStudentById(student.getStudentId());
+		});
+
+		assertEquals("Student_not_exists", exception.getMessage());
+	}
+
+	@Test
+	void testGetAllStudents() {
+		List<Student> students = Arrays.asList(student);
+		when(studentRepo.findAll()).thenReturn(students);
+
+		List<StudentDTO> result = studentService.getAll();
+		assertNotNull(result);
+		assertEquals(1, result.size());
+		assertEquals(studentDTO1.getName(), result.get(0).getName());
+	}
+
+	@Test
+	void testGetAllStudentsEmpty() {
+		when(studentRepo.findAll()).thenReturn(Arrays.asList());
+
+		List<StudentDTO> result = studentService.getAll();
+		assertNotNull(result);
+		assertTrue(result.isEmpty());
+	}
+
+	@Test
+	void testDeleteStudentSuccess() throws StudentException {
+		when(studentRepo.findById(student.getStudentId())).thenReturn(Optional.of(student));
+		doNothing().when(studentRepo).deleteById(student.getStudentId());
+
+		String response = studentService.deleteStudent(student.getStudentId());
+		assertEquals("Student deleted with ID : " + student.getStudentId(), response);
+	}
+
+	@Test
+	void testDeleteStudentFailure() {
+		when(studentRepo.findById(student.getStudentId())).thenReturn(Optional.empty());
+
+		StudentException exception = assertThrows(StudentException.class, () -> {
+			studentService.deleteStudent(student.getStudentId());
+		});
+
+		assertEquals("Student_not_exists", exception.getMessage());
+	}
+
+	@Test
+	void testUpdateStudentSuccess() {
+		StudentDTO updatedStudentDTO = new StudentDTO(101, "Raja", "PBS", "BiPC");
+		Student updatedStudent = new Student(101, "Raja", "PBS", "BiPC");
+		when(studentRepo.save(any(Student.class))).thenReturn(updatedStudent);
+
+		StudentDTO result = studentService.updateStudent(101, updatedStudentDTO);
+		assertNotNull(result);
+		assertEquals(updatedStudentDTO.getBranch(), result.getBranch());
 	}
 }
