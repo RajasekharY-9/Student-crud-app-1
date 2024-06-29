@@ -101,7 +101,7 @@ public class StudentServiceImpl implements StudentService{
     }
     public Student convertToEntity(StudentDTO studentDTO){
         Student student=new Student();
-       // student.setStudentId(studentDTO.getStudentId());
+        student.setStudentId(studentDTO.getStudentId());
         student.setBranch(studentDTO.getBranch());
         student.setName(studentDTO.getName());
         student.setClgName(studentDTO.getClgName());
