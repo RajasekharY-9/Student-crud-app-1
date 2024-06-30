@@ -26,10 +26,10 @@ jobs:
           distribution: 'adopt'
 
       - name: Build with Maven
-        run: mvn -B package --file student-crud-app-1/pom.xml  # Adjust the path to pom.xml
+        run: mvn -B package --file student-crud-app-1/pom.xml
 
       - name: Build Docker image
-        run: docker build -t spring-boot-app .
+        run: docker build -t spring-boot-app ./student-crud-app-1
 
       - name: Deploy to Docker
         env:
