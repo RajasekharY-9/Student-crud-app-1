@@ -26,7 +26,7 @@ jobs:
           distribution: 'adopt'  # Specify the JDK distribution type
 
       - name: Build with Maven
-        run: mvn -B package --file pom.xml
+        run: mvn -B package --file student-crud-app-1/pom.xml  # Adjust the path to pom.xml
       
       - name: Build Docker image
         run: docker build -t spring-boot-app .
