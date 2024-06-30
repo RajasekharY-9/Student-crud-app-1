@@ -27,3 +27,10 @@ http://localhost:8080/api/v1/102/update
 "clgName":"PBS",
 "branch":"MPC"
 }
+
+ docker build -t spring-boot-app.jar
+  docker-compose up --build
+  docker run -p 9090:8080 spring-boot-app
+
+
+
