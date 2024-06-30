@@ -66,4 +66,13 @@ jobs:
         run: docker load -i my-spring-boot-app.tar
 
       - name: Run Docker container
-        run: docker run -d -p 8080:8080 my-spring-boot-app:latest
+        run: docker run -d -p 8080:8080 --name my-app my-spring-boot-app:latest
+
+      - name: Check MySQL Service Status
+        run: docker exec my-app mysqladmin ping -h db --silent
+
+      - name: Initialize Database Schema
+        run: docker exec my-app java -jar /app/init-db.jar
+
+      - name: Verify Application Health
+        run: curl -sSf http://localhost:8080/actuator/health || exit 1
