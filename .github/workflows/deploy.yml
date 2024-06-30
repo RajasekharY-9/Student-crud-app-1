@@ -32,6 +32,9 @@ jobs:
         run: docker build -t spring-boot-app ./student-crud-app-1
 
       - name: Deploy to Docker
+        run: |
+          cd student-crud-app-1  # Change directory to where docker-compose.yml is located
+          docker-compose up -d --build
         env:
           SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/student_db?createDatabaseIfNotExists=true
           SPRING_DATASOURCE_USERNAME: root
@@ -39,5 +42,3 @@ jobs:
           SPRING_JPA_SHOW_SQL: true
           SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL: true
           SPRING_JPA_HIBERNATE_DDL_AUTO: update
-        run: |
-          docker-compose up -d --build
