@@ -9,22 +9,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    services:
-      mysql:
-        image: mysql:8.0
-        ports:
-          - 3306:3306
-        options: >-
-          --health-cmd="mysqladmin ping"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
-        env:
-          MYSQL_DATABASE: student_db
-          MYSQL_USER: root
-          MYSQL_PASSWORD: 9398434528
-          MYSQL_ROOT_PASSWORD: 9398434528
-
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
@@ -40,32 +24,39 @@ jobs:
       working-directory: ./student-crud-app-1
 
     - name: Build Docker image
-      run: docker build . -t my-spring-boot-app:latest
+      run: docker-compose build
       working-directory: ./student-crud-app-1
 
-    - name: Save Docker image to tar
-      run: docker save my-spring-boot-app:latest -o my-spring-boot-app.tar
+    - name: Save Docker images to tar
+      run: |
+        docker save -o spring-boot-app.tar spring-boot-app
+        docker save -o mysql.tar mysql:8.0
       working-directory: ./student-crud-app-1
 
-    - name: Upload Docker image artifact
+    - name: Upload Docker images artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: my-spring-boot-app
-        path: ./student-crud-app-1/my-spring-boot-app.tar
+        name: docker-images
+        path: |
+          ./student-crud-app-1/spring-boot-app.tar
+          ./student-crud-app-1/mysql.tar
 
   deploy:
     runs-on: self-hosted
     needs: build
 
     steps:
-    - name: Download Docker image artifact
+    - name: Download Docker images artifacts
       uses: actions/download-artifact@v2
       with:
-        name: my-spring-boot-app
-        path: my-spring-boot-app.tar
+        name: docker-images
+        path: .
 
-    - name: Load Docker image
-      run: docker load -i my-spring-boot-app.tar
+    - name: Load Docker images
+      run: |
+        docker load -i spring-boot-app.tar
+        docker load -i mysql.tar
 
-    - name: Run Docker container
-      run: docker run -d -p 8080:8080 my-spring-boot-app:latest
+    - name: Run Docker Compose
+      run: docker-compose up -d
+      working-directory: ./student-crud-app-1
