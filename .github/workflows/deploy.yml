@@ -21,6 +21,7 @@ jobs:
 
     - name: Build with Maven
       run: mvn clean package
+      working-directory: ./ # Set this to the directory where your pom.xml is located
 
     - name: Build Docker image
       run: docker build . -t my-spring-boot-app:latest
