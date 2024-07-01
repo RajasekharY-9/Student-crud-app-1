@@ -7,9 +7,9 @@ import lombok.ToString;
 
 
 @ToString
-@Entity
+@Entity//it will map the class to the table
 public class Student {
-    @Id
+    @Id//it will make the studentId as primary key
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "student_id_genarator")
     @SequenceGenerator(name = "student_id_genarator", sequenceName = "student_id_genarator", initialValue = 100, allocationSize = 1)
     Integer studentId;

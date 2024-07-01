@@ -8,8 +8,8 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
-@Component//Bean class ga declare
-@Aspect
+@Component//is used to make class as spring bean
+@Aspect//is used to make class as Aspect means it will contain the advice
 public class LoggingAspect {
 
     static final Logger logger= LogManager.getLogger(LoggingAspect.class);

@@ -15,22 +15,19 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.stream.Collectors;
 
-@RestControllerAdvice
+@RestControllerAdvice//it will handle all the exceptions globally
 public class ExceptionControllerAdvice {
-
-    static final Logger logger= LogManager.getLogger(ExceptionControllerAdvice.class);
-
     @Autowired
-    Environment env;
+    Environment env;//used to get the properties from the application.properties file
 
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler(Exception.class)//it will handle all the exceptions
     public ResponseEntity<ErrorInfo> handleGlobalException(Exception ex) throws StudentException{
         ErrorInfo er=new ErrorInfo();
         er.setMessage(env.getProperty("Global_Exception"));
         er.setErrorCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
         return new ResponseEntity<>(er,HttpStatus.INTERNAL_SERVER_ERROR);
     }
-    @ExceptionHandler(StudentException.class)
+    @ExceptionHandler(StudentException.class)//it will handle user defined exceptions
     public ResponseEntity<ErrorInfo> handleGlobalException(StudentException ex) throws StudentException{
         ErrorInfo er=new ErrorInfo();
         er.setMessage(env.getProperty(ex.getMessage()));
@@ -50,7 +47,6 @@ public class ExceptionControllerAdvice {
         }else{
             ConstraintViolationException msg=(ConstraintViolationException) ex;
             methodMsg=msg.getConstraintViolations().stream().map(ConstraintViolation::getMessage).collect(Collectors.joining(", "));
-
         }
         er.setMessage(methodMsg);
         er.setErrorCode(HttpStatus.BAD_REQUEST.value());

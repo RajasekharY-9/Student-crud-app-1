@@ -12,8 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Service
-@Transactional
+@Service//indicates that an annotated class is a "Service"
+@Transactional//annotation provides the application to maintain the integrity of the data means that the transaction should be executed in a single unit.
+
 public class StudentServiceImpl implements StudentService{
 
     @Autowired
@@ -88,8 +89,8 @@ public class StudentServiceImpl implements StudentService{
         student.setBranch(studentDTO.getBranch());
         student.setName(studentDTO.getName());
         student.setClgName(studentDTO.getClgName());
-        studentRepo.save(student);
-        StudentDTO s=convertToDTO(student);
+
+        StudentDTO s=convertToDTO( studentRepo.save(student));
 
         return s;
     }

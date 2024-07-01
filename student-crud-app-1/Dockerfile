@@ -1,4 +1,6 @@
-FROM openjdk:17-jdk-alpine
+FROM openjdk:8
 EXPOSE 8080
-ADD target/spring-boot-app.jar spring-boot-app.jar
-ENTRYPOINT ["java", "-jar", "/spring-boot-app.jar"]
+ADD target/springboot-student.jar springboot-student.jar
+ENTRYPOINT ["java","-jar","springboot-student.jar"]
+
+

@@ -12,19 +12,27 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/v1")
-@Validated
+@RestController//ResponseBody+Controller->It will make class as controller that handles http requests
+@RequestMapping("/api/v1")//It will map web requests onto methods in request-handling classes
+@Validated//It will validate the request
 public class StudentAPI {
 
-    @Autowired
+    @Autowired//It will inject the object dependency implicitly
     StudentService studentService;
-@PostMapping("/add")
+@PostMapping(value = "/add")//It will map uri to post request
+//@RequestBody ->It will convert json data to java object
+// @Valid ->It will validate the request
+//ResponseEntity ->It will return response to the client
     public ResponseEntity<String> addStudent(@RequestBody @Valid StudentDTO studentDTO) throws StudentException{
     String s = studentService.addStudent(studentDTO);
     return new ResponseEntity<>(s, HttpStatus.CREATED);
 }
-@GetMapping("/{name}")
+@GetMapping("/{name}")//It will map uri to get request
+//@PathVariable ->It will extract the data from uri
+//@RequestParam ->It will extract the data from query parameter
+//@PathParam ->It will extract the data from path parameter
+//Difference between @PathParam and @PathVariable is that @PathParam is used in JAX-RS and @PathVariable is used in Spring
+//JAX-RS means Java API for RESTful Web Services
     public ResponseEntity<StudentDTO> getStudentByName(@PathVariable String name) throws StudentException{
     StudentDTO student = studentService.getStudentByName(name);
     return new ResponseEntity<>(student,HttpStatus.OK);
@@ -40,11 +48,13 @@ public class StudentAPI {
     return new ResponseEntity<>(s,HttpStatus.OK);
     }
     @DeleteMapping("/{id}")
+    //It will map uri to delete request
     public ResponseEntity<String> deleteStudent(@PathVariable Integer id) throws StudentException{
         String s = studentService.deleteStudent(id);
         return new ResponseEntity<>(s,HttpStatus.OK);
     }
     @PatchMapping("/{id}/update")
+    //It will map uri to patch request it will update small amount of data where as PUT Mapping update bulk data
     public ResponseEntity<StudentDTO> updateStudent(@PathVariable Integer id,@RequestBody @Valid StudentDTO studentDTO){
         StudentDTO s=studentService.updateStudent(id,studentDTO);
     return new ResponseEntity<>(s,HttpStatus.OK);

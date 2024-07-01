@@ -1,4 +1,4 @@
-/*
+
 package com.infy.student_crud_app_1;
 
 import com.infy.student_crud_app_1.dto.StudentDTO;
@@ -23,9 +23,9 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest
 class StudentCrudApp1ApplicationTests {
-	@Mock
+	@Mock//Mockito mock object means it will create a dummy object of the class
 	private StudentRepo studentRepo;
-	@InjectMocks
+	@InjectMocks//InjectMocks annotation is used to create and inject the mock object
 	private StudentServiceImpl studentService;
 	private  StudentDTO studentDTO1;
 	private Student student;
@@ -36,7 +36,7 @@ class StudentCrudApp1ApplicationTests {
 		student=new Student(101,"Raja","PBS","MPC");
 	}
 
-	@Test
+	@Test//The @Test annotation tells JUnit that the public void method to which it is attached can be run as a test case
 	public void testAddStudentSuccess() throws StudentException {
 		// Mock studentRepo.findByName to return null (student doesn't exist)
 		when(studentRepo.findByName(studentDTO1.getName())).thenReturn(null);
@@ -152,4 +152,4 @@ StudentException exception=assertThrows(StudentException.class,()->{
 		assertEquals(updatedStudentDTO.getBranch(), result.getBranch());
 	}
 }
-*/
+

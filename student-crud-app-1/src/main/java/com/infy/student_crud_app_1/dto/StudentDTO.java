@@ -7,11 +7,13 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
-
+//DTO -> Data transfer object
+//It will have the validations and the data that is to be transferred to the client
+//SOLID principles -> Single responsibility principle means that a class should have only one reason to change
 public class StudentDTO {
     Integer studentId;
 
-    @NotEmpty(message = "{name.not.empty}")
+    @NotEmpty(message = "{name.not.empty}")//check for null and empty
     String name;
     @NotEmpty(message = "{clgname.not.empty}")
 
