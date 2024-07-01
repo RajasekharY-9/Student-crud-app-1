@@ -6,11 +6,16 @@ import com.infy.student_crud_app_1.model.Student;
 import com.infy.student_crud_app_1.repo.StudentRepo;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service//indicates that an annotated class is a "Service"
 @Transactional//annotation provides the application to maintain the integrity of the data means that the transaction should be executed in a single unit.
@@ -93,6 +98,33 @@ public class StudentServiceImpl implements StudentService{
         StudentDTO s=convertToDTO( studentRepo.save(student));
 
         return s;
+    }
+
+    @Override
+    public List<StudentDTO> getonlyFirstFive(Integer pageNo, Integer pageSize) throws StudentException {
+        Pageable pageable= PageRequest.of(pageNo,pageSize);
+        Page<Student> page=studentRepo.findAll(pageable);
+        if(page.isEmpty()){
+            throw new StudentException("Student_not_exists");
+        }
+        else{
+            return   page.getContent().stream().map(this::convertToDTO).collect(Collectors.toList());
+        }
+
+    }
+
+    @Override
+    public List<StudentDTO> sortStudents(Sort sort) throws StudentException {
+        Iterable<Student> list = studentRepo.findAll(sort);
+if(list==null){
+    throw new StudentException("Student_not_exists");
+}
+List<StudentDTO> dtos=new ArrayList<>();
+for(Student s:list){
+    dtos.add(convertToDTO(s));
+}
+
+        return dtos;
     }
 
     public StudentDTO convertToDTO(Student student){

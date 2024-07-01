@@ -1,6 +1,7 @@
 package com.infy.student_crud_app_1.repo;
 
 import com.infy.student_crud_app_1.model.Student;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,4 +16,8 @@ public interface StudentRepo extends JpaRepository <Student,Integer>{
     //preferred to use @Query because it is dynamic and performance is better than @NamedQuery
     Student getByClgNameAndName(String clgName, String name);
 
+
+
+    @Query("SELECT c FROM Student c order by c.")
+    Iterable<Student> sortByOrder(String name, Sort sort);
 }

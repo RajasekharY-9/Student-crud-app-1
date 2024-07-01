@@ -5,6 +5,7 @@ import com.infy.student_crud_app_1.exception.StudentException;
 import com.infy.student_crud_app_1.service.StudentService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -58,5 +59,23 @@ public class StudentAPI {
     public ResponseEntity<StudentDTO> updateStudent(@PathVariable Integer id,@RequestBody @Valid StudentDTO studentDTO){
         StudentDTO s=studentService.updateStudent(id,studentDTO);
     return new ResponseEntity<>(s,HttpStatus.OK);
+    }
+
+    @GetMapping("/firstFive")
+    //localhost:8080/api/v1/firstFive?pageNo=0&pageSize=5
+    public List<StudentDTO> getonlyFirstFive(@RequestParam("pageNo") Integer pageNo,
+                                             @RequestParam("pageSize") Integer pageSize) throws StudentException{
+
+    return studentService.getonlyFirstFive(pageNo,pageSize);
+    }
+
+    @GetMapping("/sort")
+    //localhost:8080/api/v1/sort?order=name
+    public List<StudentDTO> sortStudents(@RequestParam("order") String order, Sort sort) throws StudentException{
+
+        Sort s=Sort.by(order);
+     return   studentService.sortStudents(sort);
+
+
     }
 }
